@@ -5,6 +5,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     router = express.Router(),
+    index = express.Router(),
 
     port = process.env.PORT || 3000,
 
@@ -75,7 +76,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 
+app.use('/', index);
 app.use('/api', router);
+
+
+//Define controller for the / index route
+index.route('/')
+  .get( function( req, res){
+    res.send("Welcome to Trainers Test Api");
+  });
 
 // Define controller for the API's route.
 router.route('/')
