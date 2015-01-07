@@ -172,5 +172,5 @@ router.route('/dances/:name')
 
 
 app.listen(port, function(){
-	console.log("Server running at localhost " + port);
+	//console.log("Server running at localhost " + port);
 });
