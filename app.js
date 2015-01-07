@@ -51,20 +51,21 @@ app.use(logger('dev'));
 
 app.use('/api', router);
 
+// Define controller for the API's route.
 router.route('/')
 	.get(function (req, res) {
 		res.send("Welcome to Our Dance Api...Don't Get It Twisted");
 	});
 
-// Define routes.
+// Define GET and POST controllers for the 'dances' endpoint.
 router.route('/dances')
 
-  // GET all dances.
+  // GET request controller.
   .get(function(req, res) {
   	res.json( dances );
 	})
 
-	// Add a dance to the dance fixture.
+	// POST request handler.
 	.post(function(req, res, next){
 
 			var values = req.body;
@@ -78,9 +79,10 @@ router.route('/dances')
 			next();
 	});
 
+// Define GET, PUT and DELETE controllers for the 'dances/:name' endpoint.
 router.route('/dances/:name')
 
-  // GET a dance of a specific name.
+  // GET request controller.
 	.get(function( req, res){
 
 		var dance_name = req.params.name.toLowerCase();
@@ -96,6 +98,7 @@ router.route('/dances/:name')
 		}
 	})
 
+  // PUT request controller.
 	.put(function (req, res) {
 		var dance_name = req.params.name.toLowerCase();
 
@@ -111,6 +114,7 @@ router.route('/dances/:name')
 		}
 	})
 
+	// DELETE request controller
 	.delete(function (req, res) {
 		var dance_name = req.params.name.toLowerCase();
 
