@@ -6,8 +6,25 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var router = express.Router();
 var app = express();
-
 var port = process.env.PORT || 5555;
+
+var mongoose = require('mongoose');
+var dance;
+
+mongoose.connect('mongodb://localhost/dances');
+
+var Dances = mongoose.model('Dances', { 
+
+  name: {
+    type: String,
+    required: true
+  },
+  creator: String,
+  where_created: String,
+  popularity: Number
+
+});
+
 
 var dances = [
 
@@ -40,6 +57,13 @@ var dances = [
    	  "popularity" : 5
    },
 ];
+//dumping data into db :)
+
+dances.forEach(function(element, index){
+  
+  dance = new Dances(element);
+  dance.save();
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
