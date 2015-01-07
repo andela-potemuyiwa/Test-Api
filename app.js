@@ -1,15 +1,18 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var router = express.Router();
-var app = express();
-var port = process.env.PORT || 5555;
+var express = require('express'),
+    path = require('path'),
+    favicon = require('serve-favicon'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    router = express.Router(),
 
-var mongoose = require('mongoose');
-var dance;
+    port = process.env.PORT || 3000,
+
+    app = express(),
+
+    mongoose = require('mongoose'),
+
+    dance = {} ;
 
 mongoose.connect('mongodb://localhost/dances');
 
@@ -17,6 +20,7 @@ var Dances = mongoose.model('Dances', {
 
   name: {
     type: String,
+    unique: true,
     required: true
   },
   creator: String,
@@ -26,44 +30,46 @@ var Dances = mongoose.model('Dances', {
 });
 
 
-var dances = [
 
-   {
+// var dances = [
 
-   	  "name" : "moonwalk",
-   	  "creator" : "Michael Jackson",
-   	  "where_created": "Atlanta,USA",
-   	  "popularity" : 2
-   },
-   {
+//    {
 
-   	  "name" : "highlife",
-   	  "creator" : "Osadebe",
-   	  "where_created": "Enugu,Nigeria",
-   	  "popularity" : 3
-   },
-   {
+//    	  "name" : "moonwalk",
+//    	  "creator" : "Michael Jackson",
+//    	  "where_created": "Atlanta,USA",
+//    	  "popularity" : 2
+//    },
+//    {
 
-   	  "name" : "shoki",
-   	  "creator" : "Lil Kesh",
-   	  "where_created": "Lagos,Nigeria",
-   	  "popularity" : 5
-   },
-   {
+//    	  "name" : "highlife",
+//    	  "creator" : "Osadebe",
+//    	  "where_created": "Enugu,Nigeria",
+//    	  "popularity" : 3
+//    },
+//    {
 
-   	  "name" : "kukere",
-   	  "creator" : "Iyanya",
-   	  "where_created": "Lagos, Nigeria",
-   	  "popularity" : 5
-   },
-];
-//dumping data into db :)
+//    	  "name" : "shoki",
+//    	  "creator" : "Lil Kesh",
+//    	  "where_created": "Lagos,Nigeria",
+//    	  "popularity" : 5
+//    },
+//    {
 
-dances.forEach(function(element, index){
-  
-  dance = new Dances(element);
-  dance.save();
-});
+//    	  "name" : "kukere",
+//    	  "creator" : "Iyanya",
+//    	  "where_created": "Lagos, Nigeria",
+//    	  "popularity" : 5
+//    },
+// ];
+// //dumping data into db :)
+
+// dances.forEach(function(element, index){
+
+//   dance = new Dances(element);
+//   dance.save();
+// });
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -82,7 +88,16 @@ router.route('/dances')
 
   // GET request controller.
   .get(function(req, res) {
-  	res.json( dances );
+    Dances.find(function (err, dances) {
+
+      if (err) {
+        res.send(err);
+      }
+
+    res.json(dances);
+
+    });
+
 	})
 
 	// POST request handler.
@@ -90,9 +105,15 @@ router.route('/dances')
 
 			var values = req.body;
 
-			console.log(req.body.name || 'Hekk');
+			dance = new Dances(values);
 
-			dances.push(values);
+      dance.save(function (err, saved_dance) {
+        if (err) {
+          res.end(err);
+        }
+
+        res.send(saved_dance)
+      }); 
 
 			res.json( dances );
 
@@ -106,43 +127,47 @@ router.route('/dances/:name')
 	.get(function( req, res){
 
 		var dance_name = req.params.name.toLowerCase();
-	    var counter = 0;
-	    var value;
-		for( counter; counter <= dances.length; counter++ ){
-			if( dances[counter].name === dance_name ){
-				 res.json( dances[counter] );
-			}
-			else{
-				res.status(404).json("Not Found");
-			}
-		}
+
+    Dances.find({name: dance_name}).find(function (err, dance) {
+
+      if (err) {
+        res.status(404).json("Not Found");
+      }
+
+      res.json(dance);
+    });
+
 	})
 
   // PUT request controller.
 	.put(function (req, res) {
-		var dance_name = req.params.name.toLowerCase();
+		var dance_name = req.params.name.toLowerCase(),
+        dance = req.body;
 
-		for (var i = 0; i < dances.length; i++) {
-			if(dances[i].name === dance_name) {
-				dances[i] = req.body;
-				res.json(dances);
-			} else {
-				res.status(404).json({
-					"message": "Dance not found"
-				});
-		  }
-		}
+    Dance.update({name: dance_name}, dance, function (err) {
+      if (err) {
+        res.status(404).json("Not Found");
+      }
+
+      res.status(200).json("Update Successful");
+
+    });
 	})
 
 	// DELETE request controller
 	.delete(function (req, res) {
+
 		var dance_name = req.params.name.toLowerCase();
 
-		dances = dances.filter(function (item) {
-			return item.name !== dance_name;
-		});
+		Dances.remove({name: dance_name}, function (err, dance) {
 
-    res.json(dances);
+      if (err) {
+        res.status(404).json("Not Found");
+      }
+
+      res.json(dance); 
+    });
+
 	});
 
 
