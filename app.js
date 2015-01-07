@@ -94,6 +94,31 @@ router.route('/dances/:name')
 				res.status(404).json("Not Found");
 			}
 		}
+	})
+
+	.put(function (req, res) {
+		var dance_name = req.params.name.toLowerCase();
+
+		for (var i = 0; i < dances.length; i++) {
+			if(dances[i].name === dance_name) {
+				dances[i] = req.body;
+				res.json(dances);
+			} else {
+				res.status(404).json({
+					"message": "Dance not found"
+				});
+		  }
+		}
+	})
+
+	.delete(function (req, res) {
+		var dance_name = req.params.name.toLowerCase();
+
+		dances = dances.filter(function (item) {
+			return item.name !== dance_name;
+		});
+
+    res.json(dances);
 	});
 
 
