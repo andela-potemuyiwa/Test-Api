@@ -9,7 +9,6 @@ var app = express();
 
 var port = process.env.PORT || 5555;
 
-
 var dances = [
 
    {
@@ -40,14 +39,11 @@ var dances = [
    	  "where_created": "Lagos, Nigeria",
    	  "popularity" : 5
    },
-]
-
-
+];
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
-
 
 app.use('/api', router);
 
@@ -124,7 +120,6 @@ router.route('/dances/:name')
 
     res.json(dances);
 	});
-
 
 
 app.listen(port, function(){
