@@ -14,62 +14,62 @@ var express = require('express'),
 
     dance = {} ;
 
-mongoose.connect('mongodb://localhost/dances');
+    mongoose.connect('mongodb://unicodeveloper:pote1142@ds031661.mongolab.com:31661/dances');
 
-var Dances = mongoose.model('Dances', { 
+    var Dances = mongoose.model('Dances', { 
 
-  name: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  creator: String,
-  where_created: String,
-  popularity: Number
+    name: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    creator: String,
+    where_created: String,
+    popularity: Number
 
+  });
+
+
+
+/*var dances = [
+
+   {
+
+   	  "name" : "moonwalk",
+   	  "creator" : "Michael Jackson",
+   	  "where_created": "Atlanta,USA",
+   	  "popularity" : 2
+   },
+   {
+
+   	  "name" : "highlife",
+   	  "creator" : "Osadebe",
+   	  "where_created": "Enugu,Nigeria",
+   	  "popularity" : 3
+   },
+   {
+
+   	  "name" : "shoki",
+   	  "creator" : "Lil Kesh",
+   	  "where_created": "Lagos,Nigeria",
+   	  "popularity" : 5
+   },
+   {
+
+   	  "name" : "kukere",
+   	  "creator" : "Iyanya",
+   	  "where_created": "Lagos, Nigeria",
+   	  "popularity" : 5
+   },
+];
+//dumping data into db :)
+
+dances.forEach(function(element, index){
+
+  dance = new Dances(element);
+  dance.save();
 });
-
-
-
-// var dances = [
-
-//    {
-
-//    	  "name" : "moonwalk",
-//    	  "creator" : "Michael Jackson",
-//    	  "where_created": "Atlanta,USA",
-//    	  "popularity" : 2
-//    },
-//    {
-
-//    	  "name" : "highlife",
-//    	  "creator" : "Osadebe",
-//    	  "where_created": "Enugu,Nigeria",
-//    	  "popularity" : 3
-//    },
-//    {
-
-//    	  "name" : "shoki",
-//    	  "creator" : "Lil Kesh",
-//    	  "where_created": "Lagos,Nigeria",
-//    	  "popularity" : 5
-//    },
-//    {
-
-//    	  "name" : "kukere",
-//    	  "creator" : "Iyanya",
-//    	  "where_created": "Lagos, Nigeria",
-//    	  "popularity" : 5
-//    },
-// ];
-// //dumping data into db :)
-
-// dances.forEach(function(element, index){
-
-//   dance = new Dances(element);
-//   dance.save();
-// });
-
+*/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -137,12 +137,12 @@ router.route('/dances/:name')
       res.json(dance);
     });
 
-	})
+  })
 
   // PUT request controller.
 	.put(function (req, res) {
-		var dance_name = req.params.name.toLowerCase(),
-        dance = req.body;
+		var dance_name = req.params.name.toLowerCase(), 
+      dance = req.body;
 
     Dance.update({name: dance_name}, dance, function (err) {
       if (err) {
