@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var router = express.Router();
 var app = express();
 
+var port = process.env.PORT || 5555;
+
 
 var dances = [
 
@@ -49,42 +51,53 @@ app.use(logger('dev'));
 
 app.use('/api', router);
 
-router.get('/', function(req, res){
-	res.send("Welcome to Our Dance Api...Don't Get It Twisted");
-});
+router.route('/')
+	.get(function (req, res) {
+		res.send("Welcome to Our Dance Api...Don't Get It Twisted");
+	});
 
-router.get('/dances', function(req, res) {
-  res.json( dances );
-});
+// Define routes.
+router.route('/dances')
 
-router.get('/dances/:name', function( req, res){
+  // GET all dances.
+  .get(function(req, res) {
+  	res.json( dances );
+	})
 
-	var dance_name = req.params.name.toLowerCase();
-    var counter = 0;
-    var value;
-	for( counter; counter <= dances.length; counter++ ){
-		if( dances[counter].name === dance_name ){
-			 res.json( dances[counter] );
+	// Add a dance to the dance fixture.
+	.post(function(req, res, next){
+
+			var values = req.body;
+
+			console.log(req.body.name || 'Hekk');
+
+			dances.push(values);
+
+			res.json( dances );
+
+			next();
+	});
+
+router.route('/dances/:name')
+
+  // GET a dance of a specific name.
+	.get(function( req, res){
+
+		var dance_name = req.params.name.toLowerCase();
+	    var counter = 0;
+	    var value;
+		for( counter; counter <= dances.length; counter++ ){
+			if( dances[counter].name === dance_name ){
+				 res.json( dances[counter] );
+			}
+			else{
+				res.status(404).json("Not Found");
+			}
 		}
-		else{
-			res.status(404).json("Not Found");
-		}
-	}
-});
+	});
 
-router.post('/dances', function(req, res, next){
-   
-    var values = req.body;
 
-    console.log(req.body.name || 'Hekk');
 
-    dances.push(values);
-
-    res.json( dances );
-    
-    next();
-});
-
-app.listen(3000, function(){
-	console.log("Server running at localhost:3000");
+app.listen(port, function(){
+	console.log("Server running at localhost " + port);
 });
