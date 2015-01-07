@@ -45,7 +45,7 @@ var dances = [
 
 
 
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 
 
@@ -63,13 +63,13 @@ router.post('/dances', function(req, res, next){
    
     var values = req.body;
 
-    console.log( req.body);
+    console.log(req.body.name || 'Hekk');
 
-    next();
-
-    dances.push( values );
+    dances.push(values);
 
     res.json( dances );
+    
+    next();
 });
 
 app.listen(3000, function(){
