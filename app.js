@@ -128,7 +128,7 @@ router.route('/dances/:name')
 
 		var dance_name = req.params.name.toLowerCase();
 
-    Dances.find({name: dance_name}).find(function (err, dance) {
+    Dances.find({name: dance_name}, function (err, dance) {
 
       if (err) {
         res.status(404).json("Not Found");
