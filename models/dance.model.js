@@ -7,6 +7,6 @@ var danceSchema = new mongoose.Schema({
     popularity: Number
 });
 
-var DanceModel = mongoose.model('DanceModel', danceSchema);
+var DanceModel = mongoose.model('DanceModel', danceSchema, 'dances');
 
 module.exports = DanceModel;

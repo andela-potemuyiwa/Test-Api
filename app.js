@@ -14,12 +14,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(logger('dev'));
 
-app.use('/', index);
-app.use('/api', router);
+app.use('/', router);
 routes(router);
 
 
-api.use(function (request, response, next) {
+app.use(function (request, response, next) {
   response.header('Access-Control-Allow-Origin', '*');
   response.header('Access-Control-Allow-Methods', 'GET,POST,PUT,OPTIONS,HEAD');
   response.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length');

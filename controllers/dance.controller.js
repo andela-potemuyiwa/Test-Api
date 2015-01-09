@@ -1,10 +1,14 @@
 'use strict';
 
 var mongoose = require('mongoose');
-var DanceModel = mongoose.model('DanceModel');
+var DanceModel = require('../models/dance.model');
 
-module.exports = function () {
-    var methods = {
+module.exports = {
+
+        root: function( request, response){
+            response.send("WELCOME TO TRAINERS API BASE");
+        },
+
         apiRoot: function (request, response) {
             response.send('Welcome to Our Dance Api...Don\'t Get It Twisted');
         },
@@ -74,5 +78,4 @@ module.exports = function () {
         }
     };
 
-    return methods;
-};
+   
