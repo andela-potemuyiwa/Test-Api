@@ -100,7 +100,7 @@ router.route('/dances')
     Dances.find(function (err, dances) {
 
       if (err) {
-        res.send(err);
+        res.send(err);  
       }
 
     res.json(dances);
